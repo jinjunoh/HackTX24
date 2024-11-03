@@ -1,0 +1,15 @@
+"welcome" = "¡Bienvenido!";
+"subtitle" = "Por favor, inicia sesión o crea una cuenta para continuar";
+"login" = "Iniciar sesión";
+"signup" = "Regístrate";
+"create_account" = "Crear cuenta";
+"username_placeholder" = "Nombre de usuario";
+"email_placeholder" = "Correo electrónico";
+"password_placeholder" = "Contraseña";
+"link_language" = "Enlazar idioma";
+"language_display" = "Idioma: %@"; // %@ is a placeholder for the dynamic language name
+"already_have_account" = "¿Ya tienes una cuenta?";
+"don_t_have_account" = "¿No tienes una cuenta?";
+"or_use_social_media" = "O regístrate usando redes sociales";
+"read_terms" = "Lee nuestros Términos y Condiciones.";
+"you_are_safe" = "Estás completamente seguro.";

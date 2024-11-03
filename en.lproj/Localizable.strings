@@ -1,0 +1,15 @@
+"welcome" = "Welcome!";
+"subtitle" = "Please log in or create an account to continue";
+"login" = "Log In";
+"signup" = "Sign Up";
+"create_account" = "Create Account";
+"username_placeholder" = "Username";
+"email_placeholder" = "Email";
+"password_placeholder" = "Password";
+"link_language" = "Link Language";
+"language_display" = "Language: %@"; // %@ is a placeholder for the dynamic language name
+"already_have_account" = "Already have an account?";
+"don_t_have_account" = "Don't have an account?";
+"or_use_social_media" = "Or Sign Up using Social Media";
+"read_terms" = "Read our Terms & Conditions.";
+"you_are_safe" = "You are completely safe.";
