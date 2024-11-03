@@ -1,10 +1,11 @@
 import SwiftUI
 import ARKit
 import SceneKit
+import Vision
 
 struct ARView: UIViewRepresentable {
     let arView = ARSCNView(frame: .zero)
-
+    
     func makeUIView(context: Context) -> ARSCNView {
         arView.delegate = context.coordinator
         arView.scene = SCNScene()
@@ -20,16 +21,71 @@ struct ARView: UIViewRepresentable {
     func updateUIView(_ uiView: ARSCNView, context: Context) {}
 
     func makeCoordinator() -> Coordinator {
-        Coordinator()
+        Coordinator(self)
     }
 
-    class Coordinator: NSObject, ARSCNViewDelegate {}
+    class Coordinator: NSObject, ARSCNViewDelegate {
+        var parent: ARView
+        init(_ parent: ARView) {
+            self.parent = parent
+        }
+    }
 
     func takeScreenshot() -> UIImage? {
         return arView.snapshot()
     }
-}
+    
+    // Detect text in the captured image
+    func detectText(in image: UIImage) {
+        guard let cgImage = image.cgImage else { return }
+        let requestHandler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        let textDetectionRequest = VNRecognizeTextRequest { (request, error) in
+            if let error = error {
+                print("Text recognition error: \(error)")
+                return
+            }
+            guard let observations = request.results as? [VNRecognizedTextObservation] else { return }
+            for observation in observations {
+                if let topCandidate = observation.topCandidates(1).first {
+                    let recognizedText = topCandidate.string
+                    self.translateText(recognizedText)
+                }
+            }
+        }
 
+        do {
+            try requestHandler.perform([textDetectionRequest])
+        } catch {
+            print("Failed to perform text detection: \(error)")
+        }
+    }
+
+    // Mock translation function
+    private func translateText(_ text: String) {
+        let translatedText = "Translated Text Here"  // Mocked translation
+        print(text)
+
+        DispatchQueue.main.async {
+            self.displayTranslatedText(translatedText)
+        }
+    }
+
+    // Display translated text as an AR node
+    // TODO: not working
+    private func displayTranslatedText(_ translatedText: String) {
+        print("Displaying func entered")
+        let textNode = SCNNode(geometry: createTextGeometry(translatedText))
+        textNode.position = SCNVector3(0, 0, -0.5) // Adjust position for better alignment
+        arView.scene.rootNode.addChildNode(textNode)
+    }
+
+    private func createTextGeometry(_ text: String) -> SCNText {
+        let textGeometry = SCNText(string: text, extrusionDepth: 1.0)
+        textGeometry.font = UIFont.systemFont(ofSize: 10)
+        textGeometry.firstMaterial?.diffuse.contents = UIColor.white
+        return textGeometry
+    }
+}
 struct ARContentView: View {
     @State private var capturedImage: UIImage? = nil  // Track if a screenshot has been taken
     let arView = ARView()
@@ -53,7 +109,7 @@ struct ARContentView: View {
                                 .font(.system(size: 30))
                                 .foregroundColor(.white)
                                 .padding(.horizontal, 30)
-                                .padding(.top, 60)      // Adjusted top padding to move below the status bar
+                                .padding(.top, 60)
                         }
                         Spacer()
                     }
@@ -64,7 +120,6 @@ struct ARContentView: View {
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    // Top icons (like search and profile icons in the Snapchat example)
                     HStack {
                         Button(action: {
                             // Profile action
@@ -84,14 +139,12 @@ struct ARContentView: View {
                                 .foregroundColor(.white)
                         }
                     }
-                    .padding(.horizontal, 30)  // Added padding for overall margin
+                    .padding(.horizontal, 30)
                     .padding(.top, 60)
                     
                     Spacer()
                     
-                    // Center capture button with left and right filler icons
                     HStack {
-                        // Left icon (e.g., friends icon)
                         Button(action: {
                             // Left icon action
                         }) {
@@ -102,11 +155,11 @@ struct ARContentView: View {
                         
                         Spacer()
                         
-                        // Capture button
                         Button(action: {
                             if let screenshot = arView.takeScreenshot() {
                                 capturedImage = screenshot  // Show the captured image
-                                print("Screenshot captured!")
+                                arView.detectText(in: screenshot)  // Trigger text detection
+                                print("Screenshot captured and text detection started!")
                             }
                         }) {
                             Circle()
@@ -121,7 +174,6 @@ struct ARContentView: View {
                         
                         Spacer()
                         
-                        // Right icon (e.g., discover icon)
                         Button(action: {
                             // Right icon action
                         }) {
@@ -130,7 +182,7 @@ struct ARContentView: View {
                                 .foregroundColor(.white)
                         }
                     }
-                    .padding(.horizontal, 30)  // Added padding for bottom icons
+                    .padding(.horizontal, 30)
                     .padding(.bottom, 50)
                 }
             }
