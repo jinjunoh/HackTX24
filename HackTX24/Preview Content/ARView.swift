@@ -245,19 +245,24 @@ struct ARContentView: View {
                         }
                         .padding([.top, .trailing])
                         
-                        Text(translatedText.isEmpty ? "Translating..." : translatedText)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.black)
-                            .cornerRadius(16)
+                        ScrollView { // Wrap the Text in a ScrollView
+                            Text(translatedText.isEmpty ? "Translating..." : translatedText)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .cornerRadius(16)
+                                .padding(.horizontal) // Padding for horizontal spacing
+                                .font(.custom("Lato", size: 20))
+                        }
+                        .frame(maxHeight: UIScreen.main.bounds.height * 0.5) // Limit to half the screen height
+                        .frame(minHeight: 100)
                     }
                     .padding()
-                    .background(Color.gray.opacity(0.9))
+                    .background(Color.black.opacity(0.9))
                     .cornerRadius(25)
                     .transition(.move(edge: .bottom))
                     .animation(.spring())
                 }
-            }
+            }//end showPopup
         }
         .animation(.default, value: showPopup)
     }
