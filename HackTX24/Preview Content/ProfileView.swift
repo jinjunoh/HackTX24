@@ -1,81 +1,47 @@
-//
-//  ProfileView.swift
-//  HackTX24
-//
-//  Created by Joseph on 11/3/24.
-//
-
-
 import SwiftUI
 
 struct ProfileView: View {
-    // Access the dismiss environment to close the sheet
-    @Environment(\.dismiss) var dismiss
+    @Binding var isLoggedIn: Bool
+    @Binding var showProfileSheet: Bool
+    var onLogout: () -> Void // Add this parameter
+
+    private var username: String {
+        UserDefaults.standard.string(forKey: "savedUsername") ?? "Unknown User"
+    }
 
     var body: some View {
-        VStack {
-            // Top bar with "X" button for dismissing the view
-            HStack {
-                Spacer()
-                
-                Button(action: {
-                    dismiss() // Dismiss the sheet
-                }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 24))
-                        .foregroundColor(.gray)
-                        .padding()
-                }
-            }
-            
+        VStack(spacing: 20) {
             Spacer()
             
-            // Main content
-            Text("Welcome to HackTX24!")
-                .font(.headline)
-                .padding()
-
-            Text("Please log in or sign up to access your profile.")
-                .font(.subheadline)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 30)
-
-            Button(action: {
-                // Redirect to Login page
-            }) {
-                Text("Log In")
-                    .font(.title2)
-                    .fontWeight(.semibold)
+            Text("Profile")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .padding(.bottom, 20)
+            
+            Text("Username: \(username)")
+                .font(.title2)
+            
+            // Logout Button
+            Button(action: logout) {
+                Text("Logout")
+                    .fontWeight(.bold)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
+                    .background(Color.red.opacity(0.9))
                     .foregroundColor(.white)
                     .cornerRadius(10)
-                    .padding(.horizontal, 30)
             }
-
-            Button(action: {
-                // Redirect to Sign Up page
-            }) {
-                Text("Sign Up")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.green)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-                    .padding(.horizontal, 30)
-            }
+            .padding(.horizontal, 40)
             
             Spacer()
         }
         .padding()
     }
-}
 
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView()
+    private func logout() {
+        // Clear stored credentials and update state
+        isLoggedIn = false
+        showProfileSheet = false // Dismiss the profile sheet
+        onLogout() // Call the logout action
     }
 }

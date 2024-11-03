@@ -34,8 +34,13 @@ struct ARView: UIViewRepresentable {
 
 struct ARContentView: View {
     @State private var capturedImage: UIImage? = nil  // Track if a screenshot has been taken
-    @State private var showProfileView = false        // Track if profile view should be shown
+    @State private var showProfileSheet = false       // Track if profile sheet should be shown
     @State private var isFlashEnabled = false         // Track if flash mode is enabled
+    @State private var showPopup = false              // Track if translation popup should be shown
+    @State private var translatedText = ""            // Holds translated text
+    @State private var isLoggedIn = UserDefaults.standard.string(forKey: "savedUsername") != nil
+    @State private var showLoginSheet = false         // Only shows the welcome sheet when logging out
+    
     let arView = ARView()
     
     var body: some View {
@@ -68,10 +73,10 @@ struct ARContentView: View {
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    // Top icons (like profile icon for showing ProfileView)
+                    // Top icons (like profile icon for showing ProfileView or LoginSignupView)
                     HStack {
                         Button(action: {
-                            showProfileView = true // Show the profile view when tapped
+                            showProfileSheet = true // Show the profile sheet when tapped
                         }) {
                             Image(systemName: "person.circle")
                                 .font(.system(size: 28))
@@ -148,9 +153,56 @@ struct ARContentView: View {
                     .padding(.bottom, 50)
                 }
             }
+
+            // Show popup for translation when enabled
+            if showPopup {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    
+                VStack {
+                    Spacer()
+                    
+                    VStack(alignment: .trailing) {
+                        Button(action: {
+                            showPopup = false
+                            capturedImage = nil
+                        }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.system(size: 24))
+                                .foregroundColor(.white)
+                        }
+                        .padding([.top, .trailing])
+                        
+                        ScrollView { // Wrap the Text in a ScrollView
+                            Text(translatedText.isEmpty ? "Translating..." : translatedText)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .cornerRadius(16)
+                                .padding(.horizontal) // Padding for horizontal spacing
+                                .font(.custom("Lato", size: 20))
+                        }
+                        .frame(maxHeight: UIScreen.main.bounds.height * 0.5) // Limit to half the screen height
+                        .frame(minHeight: 100)
+                    }
+                    .padding()
+                    .background(Color.black.opacity(0.9))
+                    .cornerRadius(25)
+                    .transition(.move(edge: .bottom))
+                    .animation(.spring())
+                }
+            }
         }
-        .sheet(isPresented: $showProfileView) {
-            ProfileView()  // The profile view appears as a pop-up
+        .sheet(isPresented: $showProfileSheet) {
+            if isLoggedIn {
+                ProfileView(isLoggedIn: $isLoggedIn, showProfileSheet: $showProfileSheet, onLogout: handleLogout)
+            } else {
+                LoginSignupView(isLoggedIn: $isLoggedIn, showLoginSheet: $showLoginSheet)
+                    .interactiveDismissDisabled(true)
+            }
+        }
+        .sheet(isPresented: $showLoginSheet) {
+            LoginSignupView(isLoggedIn: $isLoggedIn, showLoginSheet: $showLoginSheet)
+                .interactiveDismissDisabled(true)
         }
     }
     
@@ -200,5 +252,12 @@ struct ARContentView: View {
         } catch {
             print("Failed to toggle flashlight: \(error)")
         }
+    }
+    
+    // Handle user logout
+    private func handleLogout() {
+        isLoggedIn = false
+        showProfileSheet = false
+        showLoginSheet = true // Show the welcome sheet after logging out
     }
 }

@@ -9,6 +9,7 @@ struct LoginSignupView: View {
     @State private var username = ""
     @State private var email = ""
     @State private var password = ""
+    @State private var loginError: String? // State variable to hold any login error messages
     
     // Automatically fetch the device language
     private let deviceLanguage: String = {
@@ -23,12 +24,14 @@ struct LoginSignupView: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            if !showLogin && !showSignUp {
-                initialView
+            if isLoggedIn {
+                profileView // Show profile view if logged in
+            } else if !showLogin && !showSignUp {
+                initialView // Show initial view (Login/Signup options) if not logged in
             } else if showLogin {
-                loginView
+                loginView // Show login form
             } else if showSignUp {
-                signUpView
+                signUpView // Show signup form
             }
         }
         .background(
@@ -39,6 +42,32 @@ struct LoginSignupView: View {
             )
             .edgesIgnoringSafeArea(.all)
         )
+    }
+    
+    // Profile view when the user is logged in
+    private var profileView: some View {
+        VStack(spacing: 20) {
+            Spacer()
+            
+            Text("Welcome, \(username)")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundColor(Color.white)
+            
+            // Profile actions
+            Button(action: logout) {
+                Text("Logout")
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.red.opacity(0.9))
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                    .padding(.horizontal, 40)
+            }
+            
+            Spacer()
+        }
     }
     
     private var initialView: some View {
@@ -103,17 +132,6 @@ struct LoginSignupView: View {
             .padding(.top, 10)
             
             Spacer()
-            
-            VStack(spacing: 4) {
-                Text(NSLocalizedString("you_are_safe", comment: "Safety message"))
-                    .font(.footnote)
-                    .foregroundColor(.white.opacity(0.8))
-                
-                Text(NSLocalizedString("read_terms", comment: "Terms and conditions link"))
-                    .font(.footnote)
-                    .foregroundColor(.pink.opacity(0.8))
-            }
-            .padding(.bottom, 20)
         }
     }
     
@@ -140,11 +158,13 @@ struct LoginSignupView: View {
                 .foregroundColor(.white)
                 .padding(.horizontal, 40)
             
-            Button(action: {
-                isLoggedIn = true
-                showLoginSheet = false
-                print("Logged in as user: \(username)")
-            }) {
+            if let error = loginError {
+                Text(error)
+                    .foregroundColor(.red)
+                    .padding()
+            }
+
+            Button(action: login) {
                 Text(NSLocalizedString("login", comment: "Log in button"))
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity)
@@ -221,11 +241,7 @@ struct LoginSignupView: View {
                 .background(Color.white.opacity(0.3))
                 .padding(.horizontal, 80)
             
-            Button(action: {
-                isLoggedIn = true
-                showLoginSheet = false
-                print("Account created for user: \(username)")
-            }) {
+            Button(action: createAccount) {
                 Text(NSLocalizedString("signup", comment: "Sign up button"))
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity)
@@ -238,24 +254,59 @@ struct LoginSignupView: View {
             .padding(.top, 20)
             
             Spacer()
-            
-            HStack {
-                Text(NSLocalizedString("already_have_account", comment: "Prompt for login"))
-                    .foregroundColor(Color.white.opacity(0.8))
-                Button(action: {
-                    withAnimation {
-                        showSignUp = false
-                        showLogin = true
-                    }
-                }) {
-                    Text(NSLocalizedString("login", comment: "Log in link"))
-                        .foregroundColor(Color.pink)
-                        .fontWeight(.bold)
-                }
-            }
-            .padding(.bottom, 20)
         }
         .transition(.opacity)
+    }
+
+    // Handle login logic here
+    private func login() {
+        guard !username.isEmpty && !password.isEmpty else {
+            loginError = "Username and password cannot be empty."
+            return
+        }
+        
+        // Check if credentials are in Keychain
+        if let savedPassword = KeychainHelper.getPassword(for: username),
+           savedPassword == password {
+            isLoggedIn = true
+            showLoginSheet = false
+            print("Logged in as user: \(username)")
+        } else {
+            // If credentials do not match, set error message
+            loginError = "Invalid username or password."
+        }
+    }
+    
+    // Handle account creation logic here
+    private func createAccount() {
+        guard !username.isEmpty, !email.isEmpty, email.contains("@"), !password.isEmpty else {
+            print("Please enter a valid username, email, and password.")
+            return
+        }
+        
+        // Perform account creation actions (e.g., save to Keychain, update state)
+        KeychainHelper.savePassword(password, for: username)
+        UserDefaults.standard.set(username, forKey: "savedUsername")
+        
+        isLoggedIn = true
+        showLoginSheet = false
+        print("Account created for user: \(username)")
+    }
+
+    // Handle logout and clear saved credentials
+    private func logout() {
+        if let savedUsername = UserDefaults.standard.string(forKey: "savedUsername") {
+            KeychainHelper.removePassword(for: savedUsername)
+        }
+        
+        UserDefaults.standard.removeObject(forKey: "savedUsername")
+        
+        isLoggedIn = false
+        showLoginSheet = true
+        username = ""
+        password = ""
+        
+        print("Logged out successfully.")
     }
 }
 
