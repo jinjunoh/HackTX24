@@ -93,8 +93,8 @@ struct ARView: UIViewRepresentable {
         }
 
         // Translate multiple texts in a single API call
-        private func translateTexts(_ texts: [String], completion: @escaping ([String]?) -> Void) {
-            let apiKey = "AIzaSyCvP2RlN4oSYUCVgm7Kq9ZC0dRzEEaZeCc   "  // Replace with your actual API key
+        private func translateTexts(_ texts: [String], targetLanguage: String = "es", completion: @escaping ([String]?) -> Void) {
+            let apiKey = "AIzaSyCvzRLc_rLKcmka_4TtuWm0huRrWvz03Tk"  // Replace with your actual API key
             let url = URL(string: "https://translation.googleapis.com/language/translate/v2?key=\(apiKey)")!
 
             var request = URLRequest(url: url)
