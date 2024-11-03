@@ -245,11 +245,15 @@ struct ARContentView: View {
                         }
                         .padding([.top, .trailing])
                         
-                        Text(translatedText.isEmpty ? "Translating..." : translatedText)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.black)
-                            .cornerRadius(16)
+                        ScrollView { // Wrap the Text in a ScrollView
+                            Text(translatedText.isEmpty ? "Translating..." : translatedText)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.black)
+                                .cornerRadius(16)
+                                .padding(.horizontal) // Padding for horizontal spacing
+                        }
+                        .frame(maxHeight: UIScreen.main.bounds.height * 0.5) // Limit to half the screen height
                     }
                     .padding()
                     .background(Color.gray.opacity(0.9))
@@ -257,7 +261,7 @@ struct ARContentView: View {
                     .transition(.move(edge: .bottom))
                     .animation(.spring())
                 }
-            }
+            }//end showPopup
         }
         .animation(.default, value: showPopup)
     }
