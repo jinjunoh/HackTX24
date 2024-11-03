@@ -26,38 +26,113 @@ struct ARView: UIViewRepresentable {
     class Coordinator: NSObject, ARSCNViewDelegate {}
 
     func takeScreenshot() -> UIImage? {
-        let snapshot = arView.snapshot()
-        return snapshot
+        return arView.snapshot()
     }
 }
 
 struct ARContentView: View {
+    @State private var capturedImage: UIImage? = nil  // Track if a screenshot has been taken
     let arView = ARView()
     
     var body: some View {
         ZStack {
-            arView
-                .edgesIgnoringSafeArea(.all)
-            
-            VStack {
-                Spacer()
+            // Show AR view or captured image
+            if let image = capturedImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .edgesIgnoringSafeArea(.all)
                 
-                Button(action: {
-                    if let screenshot = arView.takeScreenshot() {
-                        UIImageWriteToSavedPhotosAlbum(screenshot, nil, nil, nil)
-                        print("Screenshot captured and saved!")
+                // "X" button to go back to AR view
+                VStack {
+                    HStack {
+                        Button(action: {
+                            capturedImage = nil // Dismiss the screenshot
+                        }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.system(size: 30))
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 30)
+                                .padding(.top, 60)      // Adjusted top padding to move below the status bar
+                        }
+                        Spacer()
                     }
-                }) {
-                    Circle()
-                        .fill(Color.white)
-                        .frame(width: 70, height: 70)
-                        .overlay(
-                            Circle()
-                                .stroke(Color.black.opacity(0.2), lineWidth: 4)
-                        )
-                        .shadow(radius: 5)
+                    Spacer()
                 }
-                .padding(.bottom, 30)
+            } else {
+                arView
+                    .edgesIgnoringSafeArea(.all)
+                
+                VStack {
+                    // Top icons (like search and profile icons in the Snapchat example)
+                    HStack {
+                        Button(action: {
+                            // Profile action
+                        }) {
+                            Image(systemName: "person.circle")
+                                .font(.system(size: 28))
+                                .foregroundColor(.white)
+                        }
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            // Flash toggle action
+                        }) {
+                            Image(systemName: "bolt.circle")
+                                .font(.system(size: 28))
+                                .foregroundColor(.white)
+                        }
+                    }
+                    .padding(.horizontal, 30)  // Added padding for overall margin
+                    .padding(.top, 60)
+                    
+                    Spacer()
+                    
+                    // Center capture button with left and right filler icons
+                    HStack {
+                        // Left icon (e.g., friends icon)
+                        Button(action: {
+                            // Left icon action
+                        }) {
+                            Image(systemName: "person.2.circle")
+                                .font(.system(size: 28))
+                                .foregroundColor(.white)
+                        }
+                        
+                        Spacer()
+                        
+                        // Capture button
+                        Button(action: {
+                            if let screenshot = arView.takeScreenshot() {
+                                capturedImage = screenshot  // Show the captured image
+                                print("Screenshot captured!")
+                            }
+                        }) {
+                            Circle()
+                                .fill(Color.white)
+                                .frame(width: 70, height: 70)
+                                .overlay(
+                                    Circle()
+                                        .stroke(Color.black.opacity(0.2), lineWidth: 4)
+                                )
+                                .shadow(radius: 5)
+                        }
+                        
+                        Spacer()
+                        
+                        // Right icon (e.g., discover icon)
+                        Button(action: {
+                            // Right icon action
+                        }) {
+                            Image(systemName: "circle.grid.3x3.fill")
+                                .font(.system(size: 28))
+                                .foregroundColor(.white)
+                        }
+                    }
+                    .padding(.horizontal, 30)  // Added padding for bottom icons
+                    .padding(.bottom, 50)
+                }
             }
         }
     }

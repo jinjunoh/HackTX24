@@ -1,15 +1,8 @@
-//
-//  ContentView.swift
-//  HackTX24
-//
-//  Created by Joseph on 11/2/24.
-//
-
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        ARView()
+        ARContentView()  // Use ARContentView instead of ARView
             .edgesIgnoringSafeArea(.all)
     }
 }
@@ -19,4 +12,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
-

@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		7C1313ED2CD6F267008AA23A /* ARKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C1313EC2CD6F267008AA23A /* ARKit.framework */; platformFilters = (ios, xros, ); };
+		7C1314302CD70E67008AA23A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C13142F2CD70E67008AA23A /* GoogleService-Info.plist */; };
+		7C1314312CD70E67008AA23A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C13142F2CD70E67008AA23A /* GoogleService-Info.plist */; };
+		7C1314322CD70E67008AA23A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C13142F2CD70E67008AA23A /* GoogleService-Info.plist */; };
+		7C1314352CD7106C008AA23A /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7C1314342CD7106C008AA23A /* FirebaseAnalytics */; };
+		7C1314372CD7106C008AA23A /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 7C1314362CD7106C008AA23A /* FirebaseAnalyticsOnDeviceConversion */; };
+		7C1314392CD7106C008AA23A /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 7C1314382CD7106C008AA23A /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		7C13143B2CD7106C008AA23A /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 7C13143A2CD7106C008AA23A /* FirebaseAppCheck */; };
+		7C13143D2CD7106C008AA23A /* FirebaseAppDistribution-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 7C13143C2CD7106C008AA23A /* FirebaseAppDistribution-Beta */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +40,7 @@
 		7C1313CE2CD6F1E9008AA23A /* HackTX24Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HackTX24Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C1313D82CD6F1E9008AA23A /* HackTX24UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HackTX24UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C1313EC2CD6F267008AA23A /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/ARKit.framework; sourceTree = DEVELOPER_DIR; };
+		7C13142F2CD70E67008AA23A /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -57,7 +66,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C1314352CD7106C008AA23A /* FirebaseAnalytics in Frameworks */,
+				7C1314372CD7106C008AA23A /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 				7C1313ED2CD6F267008AA23A /* ARKit.framework in Frameworks */,
+				7C13143B2CD7106C008AA23A /* FirebaseAppCheck in Frameworks */,
+				7C1314392CD7106C008AA23A /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				7C13143D2CD7106C008AA23A /* FirebaseAppDistribution-Beta in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +95,7 @@
 		7C1313B42CD6F1E8008AA23A = {
 			isa = PBXGroup;
 			children = (
+				7C13142F2CD70E67008AA23A /* GoogleService-Info.plist */,
 				7C1313BF2CD6F1E8008AA23A /* HackTX24 */,
 				7C1313D12CD6F1E9008AA23A /* HackTX24Tests */,
 				7C1313DB2CD6F1E9008AA23A /* HackTX24UITests */,
@@ -127,6 +142,11 @@
 			);
 			name = HackTX24;
 			packageProductDependencies = (
+				7C1314342CD7106C008AA23A /* FirebaseAnalytics */,
+				7C1314362CD7106C008AA23A /* FirebaseAnalyticsOnDeviceConversion */,
+				7C1314382CD7106C008AA23A /* FirebaseAnalyticsWithoutAdIdSupport */,
+				7C13143A2CD7106C008AA23A /* FirebaseAppCheck */,
+				7C13143C2CD7106C008AA23A /* FirebaseAppDistribution-Beta */,
 			);
 			productName = HackTX24;
 			productReference = 7C1313BD2CD6F1E8008AA23A /* HackTX24.app */;
@@ -210,6 +230,9 @@
 			);
 			mainGroup = 7C1313B42CD6F1E8008AA23A;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				7C1314332CD70F65008AA23A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7C1313BE2CD6F1E8008AA23A /* Products */;
 			projectDirPath = "";
@@ -227,6 +250,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C1314312CD70E67008AA23A /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,6 +258,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C1314302CD70E67008AA23A /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,6 +266,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C1314322CD70E67008AA23A /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +439,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses the camera for augmented reality features.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This app uses the photo library";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -421,7 +448,6 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -453,6 +479,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses the camera for augmented reality features.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This app uses the photo library";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -460,7 +487,6 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -607,6 +633,45 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7C1314332CD70F65008AA23A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7C1314342CD7106C008AA23A /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C1314332CD70F65008AA23A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		7C1314362CD7106C008AA23A /* FirebaseAnalyticsOnDeviceConversion */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C1314332CD70F65008AA23A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsOnDeviceConversion;
+		};
+		7C1314382CD7106C008AA23A /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C1314332CD70F65008AA23A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		7C13143A2CD7106C008AA23A /* FirebaseAppCheck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C1314332CD70F65008AA23A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAppCheck;
+		};
+		7C13143C2CD7106C008AA23A /* FirebaseAppDistribution-Beta */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C1314332CD70F65008AA23A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseAppDistribution-Beta";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7C1313B52CD6F1E8008AA23A /* Project object */;
 }
