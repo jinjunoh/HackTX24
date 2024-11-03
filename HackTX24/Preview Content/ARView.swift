@@ -2,6 +2,7 @@ import SwiftUI
 import ARKit
 import SceneKit
 import Vision
+import CoreImage
 
 struct ARView: UIViewRepresentable {
     let arView = ARSCNView(frame: .zero)
@@ -37,28 +38,50 @@ struct ARView: UIViewRepresentable {
     
     // Detect text in the captured image
     func detectText(in image: UIImage) {
-        guard let cgImage = image.cgImage else { return }
-        let requestHandler = VNImageRequestHandler(cgImage: cgImage, options: [:])
-        let textDetectionRequest = VNRecognizeTextRequest { (request, error) in
-            if let error = error {
-                print("Text recognition error: \(error)")
-                return
-            }
-            guard let observations = request.results as? [VNRecognizedTextObservation] else { return }
-            for observation in observations {
-                if let topCandidate = observation.topCandidates(1).first {
-                    let recognizedText = topCandidate.string
-                    self.translateText(recognizedText)
-                }
-            }
+    guard let cgImage = image.cgImage else { return }
+    
+    // Step 1: Convert to Grayscale using Core Image
+    let ciImage = CIImage(cgImage: cgImage)
+    let grayscaleFilter = CIFilter(name: "CIPhotoEffectMono")
+    grayscaleFilter?.setValue(ciImage, forKey: kCIInputImageKey)
+    
+    guard let grayscaleImage = grayscaleFilter?.outputImage else { return }
+    
+    // Step 2: Apply Thresholding
+    let thresholdFilter = CIFilter(name: "CIColorControls")
+    thresholdFilter?.setValue(grayscaleImage, forKey: kCIInputImageKey)
+    thresholdFilter?.setValue(1.0, forKey: kCIInputContrastKey) // Increase contrast
+    
+    guard let thresholdedImage = thresholdFilter?.outputImage else { return }
+    
+    // Convert thresholded CIImage back to UIImage
+    let context = CIContext()
+    guard let outputCGImage = context.createCGImage(thresholdedImage, from: thresholdedImage.extent) else { return }
+    let processedImage = UIImage(cgImage: outputCGImage)
+    
+    // Step 3: Perform OCR using Vision
+    let requestHandler = VNImageRequestHandler(cgImage: processedImage.cgImage!, options: [:])
+    let textDetectionRequest = VNRecognizeTextRequest { (request, error) in
+        if let error = error {
+            print("Text recognition error: \(error)")
+            return
         }
-
-        do {
-            try requestHandler.perform([textDetectionRequest])
-        } catch {
-            print("Failed to perform text detection: \(error)")
+        guard let observations = request.results as? [VNRecognizedTextObservation] else { return }
+        for observation in observations {
+            if let topCandidate = observation.topCandidates(1).first {
+                let recognizedText = topCandidate.string
+                self.translateText(recognizedText)
+            }
         }
     }
+    
+    do {
+        try requestHandler.perform([textDetectionRequest])
+    } catch {
+        print("Failed to perform text detection: \(error)")
+    }
+}
+
 
     // Mock translation function
     private func translateText(_ text: String) {
