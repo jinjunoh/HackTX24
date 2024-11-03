@@ -254,6 +254,22 @@ struct LoginSignupView: View {
             .padding(.top, 20)
             
             Spacer()
+            
+            HStack {
+                Text(NSLocalizedString("already_have_account", comment: "Prompt for login"))
+                    .foregroundColor(Color.white.opacity(0.8))
+                Button(action: {
+                    withAnimation {
+                        showSignUp = false
+                        showLogin = true
+                    }
+                }) {
+                    Text(NSLocalizedString("login", comment: "Log in link"))
+                        .foregroundColor(Color.pink)
+                        .fontWeight(.bold)
+                }
+            }
+            .padding(.bottom, 20)
         }
         .transition(.opacity)
     }
