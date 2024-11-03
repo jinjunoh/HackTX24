@@ -303,6 +303,7 @@ struct LoginSignupView: View {
         // Perform account creation actions (e.g., save to Keychain, update state)
         KeychainHelper.savePassword(password, for: username)
         UserDefaults.standard.set(username, forKey: "savedUsername")
+        UserDefaults.standard.set(email, forKey: "savedEmail")
         
         isLoggedIn = true
         showLoginSheet = false
@@ -321,6 +322,7 @@ struct LoginSignupView: View {
         showLoginSheet = true
         username = ""
         password = ""
+        email = ""
         
         print("Logged out successfully.")
     }

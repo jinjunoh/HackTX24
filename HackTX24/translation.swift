@@ -1,7 +1,7 @@
 import Foundation
 
 func translateText(_ text: String, targetLanguage: String, completion: @escaping (String?) -> Void) {
-    let apiKey = "AIzaSyDe2NcjPQNYMM3JxX7EQ6WjhxHew_qZtaw"  // Replace with your actual API key
+    let apiKey = "GOOGLE_TRANSLATE_API_KEY"  // Replace with your actual API key
     let url = URL(string: "https://translation.googleapis.com/language/translate/v2")!
     
     var request = URLRequest(url: url)
