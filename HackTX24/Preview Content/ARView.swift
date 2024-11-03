@@ -251,7 +251,7 @@ struct ARContentView: View {
                                 .frame(maxWidth: .infinity)
                                 .cornerRadius(16)
                                 .padding(.horizontal) // Padding for horizontal spacing
-                                .font(.custom("Lato", size: 18))
+                                .font(.custom("Lato", size: 20))
                         }
                         .frame(maxHeight: UIScreen.main.bounds.height * 0.5) // Limit to half the screen height
                         .frame(minHeight: 100)
